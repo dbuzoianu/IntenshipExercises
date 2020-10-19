@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IntenshipExercises</string>
+    <string name="label_increment">"Number of clicks</string>
+</resources>
