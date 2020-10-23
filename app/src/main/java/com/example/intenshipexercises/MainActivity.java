@@ -10,9 +10,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.intenshipexercises.model.Post;
+import com.example.intenshipexercises.server.ServerProvider;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = "MainActivity";
 
     private int incrementValue;
 
@@ -42,6 +52,39 @@ public class MainActivity extends AppCompatActivity {
             incrementValue = 0;
 
         initViews();
+
+//        getPostSynchrously();
+
+        getPostAsynchrously();
+    }
+
+    private void getPostAsynchrously() {
+        ServerProvider.createPostService().getPosts().enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                List<Post> posts = response.body();
+                if(posts!=null) {
+                    Log.d("", "There are " + posts.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getPostSynchrously() {
+        try {
+            Response<List<Post>> response = ServerProvider.createPostService().getPosts().execute();
+            List<Post> posts = response.body();
+            if(posts!=null) {
+                Log.d("", "There are " + posts.size());
+            }
+        } catch (IOException e) {
+            Log.d(TAG, "error trying to get posts ");
+        }
     }
 
     private void initViews() {
