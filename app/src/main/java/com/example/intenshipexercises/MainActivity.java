@@ -10,7 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -33,15 +40,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d(TAG,"onCreate: Happy to be born!");
+//        setContentView(R.layout.activity_main);
+//        Log.d(TAG,"onCreate: Happy to be born!");
+//
+//        if(savedInstanceState != null)
+//            incrementValue = savedInstanceState.getInt("incrementValue");
+//        else
+//            incrementValue = 0;
+//
+//        initViews();
 
-        if(savedInstanceState != null)
-            incrementValue = savedInstanceState.getInt("incrementValue");
-        else
-            incrementValue = 0;
+        setContentView(R.layout.content_main);
 
-        initViews();
+        MapView mapView = findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+
+        mapView.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng coord = new LatLng(41.1622023,-8.656973);
+        googleMap.addMarker(new MarkerOptions().position(coord).title("Porto").snippet("Welcome to Porto, Portugal!"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
+
     }
 
     private void initViews() {
@@ -88,4 +112,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG,"onDestroy: Bye Bye");
     }
+
+
 }
