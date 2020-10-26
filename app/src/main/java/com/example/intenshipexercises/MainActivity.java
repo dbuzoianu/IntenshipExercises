@@ -1,14 +1,19 @@
 package com.example.intenshipexercises;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.TextViewCompat;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,18 +35,64 @@ public class MainActivity extends AppCompatActivity {
 //        incrementValue = savedInstanceState.getInt("incrementValue");
 //    }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d(TAG,"onCreate: Happy to be born!");
+//        setContentView(R.layout.activity_main);
+//        Log.d(TAG,"onCreate: Happy to be born!");
+//
+//        if(savedInstanceState != null)
+//            incrementValue = savedInstanceState.getInt("incrementValue");
+//        else
+//            incrementValue = 0;
+//
+//        initViews();
 
-        if(savedInstanceState != null)
-            incrementValue = savedInstanceState.getInt("incrementValue");
-        else
-            incrementValue = 0;
+        setContentView(R.layout.toolbar);
 
-        initViews();
+        setToolbar();
+    }
+
+    private void setToolbar() {
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Restaurant name");
+        myToolbar.setSubtitle("Restaurant description");
+        setSupportActionBar(myToolbar);
+
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_favourite:
+                Toast.makeText(this, " your favorite is clicked ", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_setting:
+                Toast.makeText(this, " your settings is clicked ", Toast.LENGTH_LONG).show();
+                return true;
+        }
+
+        return true;
+//        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return true;
     }
 
     private void initViews() {
